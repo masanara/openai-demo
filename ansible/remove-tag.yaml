@@ -6,7 +6,7 @@
     - paloaltonetworks.panos
   tasks:
     - name: Remove tag from address object
-      paloaltonetworks.panos.panos_address_object:
+      panos_address_object:
         provider: '{{ device }}'
         name: host_192.168.20.51
         value: '192.168.20.51'
