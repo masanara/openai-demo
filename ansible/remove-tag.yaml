@@ -1,0 +1,23 @@
+- name: 'Permit OpenAI'
+  hosts: pan
+  connection: local
+  gather_facts: true
+  collections:
+    - paloaltonetworks.panos
+  tasks:
+    - name: Remove tag from address object
+      paloaltonetworks.panos.panos_address_object:
+        provider: '{{ device }}'
+        name: host_192.168.20.51
+        value: '192.168.20.51'
+        tag: []
+    - name: Commit candidate configs on firewall
+      panos_commit_firewall:
+        provider: '{{ device }}'
+
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+

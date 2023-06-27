@@ -1,0 +1,22 @@
+- name: 'Ansible Test'
+  hosts: pan
+  connection: local
+  gather_facts: true
+  collections:
+    - paloaltonetworks.panos
+  tasks:
+    - name: Get the system info
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: 'show system info'
+      register: res
+
+    - name: Show the system info
+      ansible.builtin.debug:
+        msg: '{{ res.stdout }}'
+
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
