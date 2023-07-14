@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>OpenAI API Demo</title>
@@ -12,40 +11,29 @@
 
 
 <div class="container">
+
     <h1>OpenAI API Demo</h1>
-    <div class="col-8">
-        <div class="row">
-            <div class="col-md">
-                <form action="/answer" method="post" id="prompt">
-      <textarea name="prompt" class="form-control typeahead1"></textarea>
+
+<form action="/answer" method="post" id="prompt">
+  <div class="form-group">
+
+    <h2><label for="Model">利用するモデル</label></h2>
+		<select class="form-control" name="model">
+			<option value="gpt-3.5-turbo" selected>gpt-3.5-turbo</option>
+			<option value="gpt-4">gpt-4</option>
+		</select>
+  </div>
+
+  <div class="form-group">
+	  <h2><label for="Prompt">プロンプト</label></h2>
+	  <textarea name="prompt" class="form-control" rows="10"></textarea>
+  </div>
 
       <span class="input-group-btn">
         <button type="submit" class="btn btn-secondary">送信</button>
       </span>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!--
-<div class="panel panel-default">
-  <div class="panel-heading linkPanelHeader">
-    質問を入力してください。
-  </div>
-  <div class="panel-body">
-    <form action="/answer" method="post" id="prompt">
-    <div class="input-group input-group-lg">
-      <input type="text" name="prompt" class="form-control typeahead1" placeholder="質問を入力">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-secondary">送信</button>
-      </span>
-    </div>
-    </form>
-  </div>
-</div>
--->
-
+</form>
 
 
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">

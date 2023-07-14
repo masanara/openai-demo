@@ -1,23 +1,30 @@
 # coding: utf-8
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, Markup
 import os
 import openai
+import markdown
+
+#model_name = "gpt-4"
+#model_name="gpt-3.5-turbo"
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
 app = Flask(__name__, static_folder='./static', static_url_path='')
 
 @app.route('/demo')
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Hello World!</p>"
 
 @app.route('/')
 def index():
-    return app.send_static_file('index.html')
-    #return "hi"
+    #return app.send_static_file('index.html')
+    #return render_template('index.html',model=model_name)
+    return render_template('index.html')
 
 @app.route('/answer', methods=['post'])
 def answer():
+
+    """
+    # Using text-davinci-003
     prompt = request.form.get('prompt')
     try:
         response = openai.Completion.create(
@@ -31,9 +38,31 @@ def answer():
           presence_penalty=0.0,
           #stop=["\n"]
         )
-        #print(response.choices[0].text) 
         res=response.choices[0].text
         return render_template('answer.html',res=res)
+    # -- end of text-davinci-003 -- #
+    """
+    # Using gpt
+    content = request.form.get('prompt')
+    model_name = request.form.get('model')
+    try:
+        response = openai.ChatCompletion.create(
+          model=model_name,
+          messages=[
+            {"role": "system", "content": content}
+          ]
+        )
+        configs = {
+            'codehilite':{
+                'noclasses': True
+            }
+        }
+
+        res=response.choices[0].message.content
+        html = Markup(markdown.markdown(res, extensions=['fenced_code','codehilite'], extension_configs=configs))
+        return render_template('answer.html',res=html)
+    # -- end of gpt -- #
+
     except openai.error.APIError as e:
       #Handle API error here, e.g. retry or log
       print(f"OpenAI API returned an API Error: {e}")
@@ -44,6 +73,11 @@ def answer():
       #Handle connection error here
       print(f"Failed to connect to OpenAI API: {e}")
       res=f"Failed to connect to OpenAI API: {e}"
+      return render_template('error.html',res=res)
+      pass
+    except openai.error.InvalidRequestError as e:
+      print(f"OpenAI API InvalidRequestError: {e}")
+      res=f"OpenAI API InvalidRequestError: {e}"
       return render_template('error.html',res=res)
       pass
     except openai.error.RateLimitError as e:
